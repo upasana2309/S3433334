@@ -16,7 +16,7 @@ fun SplashScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         Handler(Looper.getMainLooper()).postDelayed({
             navController.navigate("home_screen")
-        }, 5000)
+        }, 3000)
     }
 
     Box(

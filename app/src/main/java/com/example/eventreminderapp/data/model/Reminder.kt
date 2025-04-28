@@ -9,5 +9,7 @@ data class Reminder(
     val title: String,
     val description: String,
     val date: String,
-    val time: String
+    val time: String,
+    val timestamp: Long,
+    val isHoliday: Boolean = false
 )

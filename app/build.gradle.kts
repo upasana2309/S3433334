@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -54,6 +55,21 @@ dependencies {
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.runner)
+    implementation(libs.androidx.espresso.core)
+    implementation(libs.play.services.basement)
+    implementation(libs.play.services.basement)
+    implementation(libs.play.services.basement)
+    implementation(libs.play.services.basement)
+    implementation(libs.play.services.basement)
+    implementation(libs.play.services.basement)
+    implementation(libs.play.services.basement)
+    implementation(libs.play.services.basement)
+    implementation(libs.play.services.basement)
+    implementation(libs.play.services.basement)
+    implementation(libs.transport.api)
+    implementation(libs.transport.api)
+    implementation(libs.transport.api)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -68,4 +84,19 @@ dependencies {
 
     // Optional: Room KTX for coroutine support
     implementation(libs.androidx.room.ktx)
+
+    implementation (libs.firebase.messaging)
+
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.core.ktx.v1120)
+
+    implementation (libs.androidx.work.runtime.ktx.v290)
+
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+
+    implementation (libs.androidx.material.icons.extended)
+
+
+
 }
