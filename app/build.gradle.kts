@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.transport.api)
     implementation(libs.transport.api)
     implementation(libs.transport.api)
+    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -96,7 +97,4 @@ dependencies {
     implementation (libs.converter.gson)
 
     implementation (libs.androidx.material.icons.extended)
-
-
-
 }

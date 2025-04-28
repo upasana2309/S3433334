@@ -12,12 +12,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         remoteMessage.notification?.let {
             Log.d("FCM", "Notification Title: ${it.title}")
             Log.d("FCM", "Notification Body: ${it.body}")
-            // We can show a notification here if needed
+            // show a notification here if needed
         }
     }
 
     override fun onNewToken(token: String) {
         Log.d("FCM", "FCM Token: $token")
-        // We can send this token to your server if needed
     }
 }

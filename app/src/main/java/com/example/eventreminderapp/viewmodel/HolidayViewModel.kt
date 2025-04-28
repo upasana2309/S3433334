@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 sealed class HolidayUiState {
-    object Loading : HolidayUiState()
+    data object Loading : HolidayUiState()
     data class Success(val holidays: List<Holiday>) : HolidayUiState()
     data class Error(val message: String) : HolidayUiState()
 }
@@ -19,7 +19,7 @@ class HolidayViewModel : ViewModel() {
     private val _uiState = MutableStateFlow<HolidayUiState>(HolidayUiState.Loading)
     val uiState: StateFlow<HolidayUiState> = _uiState
 
-    fun fetchHolidays(countryCode: String = "US", year: Int = 2025) {
+    fun fetchHolidays(countryCode: String = "UK", year: Int = 2025) {
         _uiState.value = HolidayUiState.Loading
 
         viewModelScope.launch {

@@ -11,5 +11,7 @@ data class Reminder(
     val date: String,
     val time: String,
     val timestamp: Long,
-    val isHoliday: Boolean = false
+    val isHoliday: Boolean = false,
+    val repeat: Boolean = false,
+    val repeatInterval: String? = null
 )

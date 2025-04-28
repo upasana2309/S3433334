@@ -17,14 +17,14 @@ fun AppNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = "splash_screen"
+        startDestination = "login_screen"
     ) {
         composable("splash_screen") {
             SplashScreen(navController)
         }
 
         composable("home_screen") {
-            HomeScreen(navController, viewModel)
+            HomeScreen(navController, viewModel, onLogout = ({ navController.navigate("login_screen") }))
         }
 
         composable("add_reminder") {
@@ -39,5 +39,26 @@ fun AppNavigation(
         composable("holiday_events") {
             HolidayEventsScreen(navController, holidayViewModel)
         }
+
+        composable("login_screen"){
+            LoginScreen(onLogin = ({ _, _ -> navController.navigate("home_screen") }), onSignUp = ({ navController.navigate("signup_screen") }), onForgotPassword = ({ navController.navigate("forgot_password_screen") }))
+        }
+        composable("signup_screen"){}
+        composable("forgot_password_screen"){}
+
+//        composable("login_screen") {
+//            LoginScreen(onLogin = ({ _, _ -> navController.navigate("home_screen") }), onSignUp = ({ navController.navigate("signup_screen") }), onForgotPassword = ({ navController.navigate("forgot_password_screen") }))
+//        }
+//
+//        composable("signup_screen") {
+//            SignUpScreen(onSignUp = ({ _, _ -> navController.navigate("home_screen") }), onLoginRedirect = ({ navController.navigate("login_screen") }))
+//        }
+//
+//        composable("forgot_password_screen") {
+//            ForgotPasswordScreen(
+//                onResetPassword = { _ -> navController.navigate("login_screen") },
+//                onBackToLogin = { navController.navigate("login_screen") }
+//            )
+//        }
     }
 }

@@ -3,9 +3,13 @@ package com.example.eventreminderapp.screens
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -13,7 +17,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.eventreminderapp.data.model.Reminder
+import com.example.eventreminderapp.utils.HolidayProvider
 import com.example.eventreminderapp.viewmodel.ReminderViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -30,10 +36,30 @@ fun AddReminderScreen(navController: NavHostController, viewModel: ReminderViewM
 
     val calendar = remember { Calendar.getInstance() }
     val formatter = DateTimeFormatter.ofPattern("d/M/yyyy")
+    val scope = rememberCoroutineScope()
+
+    var showHolidayDialog by remember { mutableStateOf(false) }
+    var pendingSave by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        scope.launch {
+            HolidayProvider.loadHolidays(year = 2025, countryCode = "US")
+        }
+    }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Add Reminder") })
+            TopAppBar(
+                title = { Text("Add Reminder") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+            )
         }
     ) { padding ->
         Column(
@@ -114,26 +140,16 @@ fun AddReminderScreen(navController: NavHostController, viewModel: ReminderViewM
                     if (title.isNotBlank() && date.isNotBlank() && time.isNotBlank()) {
                         try {
                             val selectedDate = LocalDate.parse(date, formatter)
-
-                            if (viewModel.holidayDates.contains(selectedDate)) {
-                                Toast.makeText(
-                                    context,
-                                    "Cannot set a reminder on a public holiday.",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                return@Button
+                            val formattedDate = selectedDate.toString() // 2025-12-25
+                            if (HolidayProvider.isHoliday(formattedDate)) {
+                                showHolidayDialog = true
+                                pendingSave = true
+                            } else {
+                                saveReminder(
+                                    title, description, date, time, calendar.timeInMillis,
+                                    navController, viewModel
+                                )
                             }
-
-                            val timestamp = calendar.timeInMillis
-                            val reminder = Reminder(
-                                title = title,
-                                description = description,
-                                date = date,
-                                time = time,
-                                timestamp = timestamp
-                            )
-                            viewModel.addReminder(reminder)
-                            navController.popBackStack()
                         } catch (e: Exception) {
                             Toast.makeText(context, "Invalid date format", Toast.LENGTH_SHORT).show()
                         }
@@ -145,6 +161,60 @@ fun AddReminderScreen(navController: NavHostController, viewModel: ReminderViewM
             ) {
                 Text("Save Reminder")
             }
+
+            if (showHolidayDialog) {
+                AlertDialog(
+                    onDismissRequest = {
+                        showHolidayDialog = false
+                        pendingSave = false
+                    },
+                    title = { Text("Holiday Warning") },
+                    text = { Text("The selected date is a public holiday. Do you still want to save the reminder?") },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            showHolidayDialog = false
+                            if (pendingSave) {
+                                saveReminder(
+                                    title, description, date, time, calendar.timeInMillis,
+                                    navController, viewModel
+                                )
+                            }
+                        }) {
+                            Text("Yes, Save")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = {
+                            showHolidayDialog = false
+                            pendingSave = false
+                        }) {
+                            Text("Cancel")
+                        }
+                    }
+                )
+            }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun saveReminder(
+    title: String,
+    description: String,
+    date: String,
+    time: String,
+    timestamp: Long,
+    navController: NavHostController,
+    viewModel: ReminderViewModel
+) {
+    val reminder = Reminder(
+        title = title,
+        description = description,
+        date = date,
+        time = time,
+        timestamp = timestamp,
+        isHoliday = HolidayProvider.isHoliday(LocalDate.parse(date, DateTimeFormatter.ofPattern("d/M/yyyy")).toString())
+    )
+    viewModel.addReminder(reminder)
+    navController.popBackStack()
 }

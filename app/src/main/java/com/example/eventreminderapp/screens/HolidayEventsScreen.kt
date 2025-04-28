@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,9 +27,9 @@ fun HolidayEventsScreen(
     viewModel: HolidayViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val context = LocalContext.current
+    LocalContext.current
 
-    val countryOptions = listOf("US", "GB", "IN", "DE", "FR", "JP", "AT")
+    val countryOptions = listOf("UK", "GB", "IN", "DE", "FR", "JP", "AT")
     var selectedCountry by remember { mutableStateOf("US") }
     var expanded by remember { mutableStateOf(false) }
 
@@ -53,7 +53,7 @@ fun HolidayEventsScreen(
         ) {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back"
                 )
             }

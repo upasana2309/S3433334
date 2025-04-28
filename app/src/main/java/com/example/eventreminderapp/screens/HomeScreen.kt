@@ -8,26 +8,36 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.eventreminderapp.data.model.Reminder
 import com.example.eventreminderapp.viewmodel.ReminderFilter
 import com.example.eventreminderapp.viewmodel.ReminderViewModel
+import com.example.eventreminderapp.utils.HolidayProvider
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController, viewModel: ReminderViewModel) {
+fun HomeScreen(
+    navController: NavHostController,
+    viewModel: ReminderViewModel,
+    onLogout: () -> Unit
+) {
     val reminders by viewModel.filteredReminders.collectAsState(initial = emptyList())
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     var selectedFilter by remember { mutableStateOf(ReminderFilter.ALL) }
     val scope = rememberCoroutineScope()
+    LocalContext.current
+
+    var showMenu by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -36,6 +46,24 @@ fun HomeScreen(navController: NavHostController, viewModel: ReminderViewModel) {
                 actions = {
                     IconButton(onClick = { navController.navigate("holiday_events") }) {
                         Icon(Icons.Filled.CalendarToday, contentDescription = "Holiday Events")
+                    }
+                    Box {
+                        IconButton(onClick = { showMenu = true }) {
+                            Icon(Icons.Filled.MoreVert, contentDescription = "Menu")
+                        }
+
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Logout") },
+                                onClick = {
+                                    showMenu = false
+                                    onLogout() // Trigger logout here
+                                }
+                            )
+                        }
                     }
                 }
             )
@@ -157,10 +185,11 @@ fun ReminderItem(reminder: Reminder, onEdit: () -> Unit, onDelete: () -> Unit, m
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
-            // 🌟 Holiday badge
-            if (reminder.isHoliday) {
+            val holidayName = HolidayProvider.getHolidayName(reminder.date)
+
+            if (holidayName != null) {
                 Text(
-                    text = "Holiday",
+                    text = "🎉 $holidayName",
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier
@@ -194,7 +223,6 @@ fun ReminderItem(reminder: Reminder, onEdit: () -> Unit, onDelete: () -> Unit, m
         }
     }
 }
-
 
 @Composable
 fun SegmentedControl(options: List<String>, selectedIndex: Int, onOptionSelected: (Int) -> Unit) {

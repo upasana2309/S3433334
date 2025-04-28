@@ -31,7 +31,7 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         LocalDate.of(2025, 8, 15),
         LocalDate.of(2025, 10, 2),
         LocalDate.of(2025, 12, 25)
-        // We will Add more holidays as needed
+        // Add more holidays as needed
     )
 
     private val repository: ReminderRepository

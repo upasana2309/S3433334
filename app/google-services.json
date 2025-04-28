@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "619805736688",
-    "project_id": "eventreminderapp-9efad",
-    "storage_bucket": "eventreminderapp-9efad.firebasestorage.app"
+    "project_number": "934865764175",
+    "project_id": "event-reminder-app-aae7a",
+    "storage_bucket": "event-reminder-app-aae7a.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:619805736688:android:265643d67aeacd9650cc35",
+        "mobilesdk_app_id": "1:934865764175:android:d151ea872463a86a4e4f3a",
         "android_client_info": {
           "package_name": "com.example.eventreminderapp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD0dVBXFRE-OUSv4A2qN-C1HnAyQEWSZoM"
+          "current_key": "AIzaSyCTz-zHnrX6mRNYcAEWKzN7HK4I0-4VSBE"
         }
       ],
       "services": {

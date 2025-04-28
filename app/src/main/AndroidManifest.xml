@@ -17,7 +17,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.EventReminderApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +31,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+        <activity android:name=".screens.LoginActivity" />
+        <activity android:name=".screens.SignUpActivity"/>
+        <activity android:name=".screens.ForgotPasswordActivity"/>
     </application>
 
 </manifest>
